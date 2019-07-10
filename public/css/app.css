@@ -10648,3 +10648,8 @@ body {
   background-color: teal;
 }
 
+#csv-data-card {
+  max-height: 500px;
+  overflow: scroll;
+}
+

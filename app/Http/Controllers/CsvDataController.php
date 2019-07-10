@@ -3,10 +3,22 @@
 namespace App\Http\Controllers;
 
 use App\CsvData;
+use App\Repositories\CsvData\CsvDataInterface;
 use Illuminate\Http\Request;
 
 class CsvDataController extends Controller
 {
+    protected $csvData;
+
+    public function __construct(CsvDataInterface $csv)
+    {
+        // requiring authentication
+        $this->middleware('auth');
+
+        // getting Model through service container
+        $this->csvData = $csv;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +26,14 @@ class CsvDataController extends Controller
      */
     public function index()
     {
-        //
+        // existing csv data
+        $csvData = $this->csvData->getAll(3);
+
+        $data = [
+            'csvData' => $csvData,
+        ];
+
+        return view('csv.import_data', $data);
     }
 
     /**

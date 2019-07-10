@@ -18,3 +18,7 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::prefix('csv')->group(function() {
+    Route::get('/', 'CsvDataController@index')->name('csv.index');
+});
