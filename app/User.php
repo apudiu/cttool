@@ -36,4 +36,12 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+
+    /**
+     * Relations
+     */
+    public function csv_data() {
+        return $this->hasMany(CsvData::class);
+    }
 }

@@ -10653,3 +10653,7 @@ body {
   overflow: scroll;
 }
 
+.hidden {
+  display: none;
+}
+

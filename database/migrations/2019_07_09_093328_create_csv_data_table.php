@@ -16,6 +16,11 @@ class CreateCsvDataTable extends Migration
         Schema::create('csv_data', function (Blueprint $table) {
             $table->bigIncrements('id');
 
+            // identify
+            $table->unsignedBigInteger('user_id');
+            $table->integer('import_batch')->comment('import batch timestamp');
+
+            // CSV fields
             $table->string('document_path')->nullable()->comment('DocumentFileName');
             $table->string('client_id')->nullable()->comment('Client_ID');
             $table->string('ca_or_file_sl')->nullable()->comment('CA No/File SL No');
@@ -68,6 +73,9 @@ class CreateCsvDataTable extends Migration
             $table->string('file_name')->nullable()->comment('File Name');
 
             $table->timestamps();
+
+            // constraints
+            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 

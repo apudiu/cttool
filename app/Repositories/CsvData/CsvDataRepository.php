@@ -9,6 +9,7 @@
 namespace App\Repositories\CsvData;
 
 use App\CsvData;
+use Illuminate\Support\Collection;
 
 class CsvDataRepository implements CsvDataInterface
 {
@@ -22,9 +23,9 @@ class CsvDataRepository implements CsvDataInterface
     }
 
     /**
-     * Get all clients
+     * Get all models
+     * @param int $limit
      * @param array $with
-     * @param bool $limit
      * @return \Illuminate\Database\Eloquent\Collection
      */
     public function getAll(int $limit=0, array $with=[])
@@ -37,8 +38,9 @@ class CsvDataRepository implements CsvDataInterface
 
         return $r;
     }
+
     /**
-     * Get client by id
+     * Get model by id
      * @param int $id
      * @param array $with
      * @return mixed
@@ -47,8 +49,9 @@ class CsvDataRepository implements CsvDataInterface
     {
         return $this->model->with($with)->findOrFail($id);
     }
+
     /**
-     * Create client
+     * Create model
      * @param array $attributes
      * @return mixed
      */
@@ -56,8 +59,19 @@ class CsvDataRepository implements CsvDataInterface
     {
         return $this->model->create($attributes);
     }
+
     /**
-     * Update client
+     * Create many models at once
+     * @param array $attributes
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function createMany(array $attributes)
+    {
+        return getAuthUser()->csv_data()->createMany($attributes);
+    }
+
+    /**
+     * Update model
      * @param int $id
      * @param array $attributes
      * @return mixed
@@ -66,13 +80,23 @@ class CsvDataRepository implements CsvDataInterface
     {
         return $this->getById($id)->update($attributes);
     }
+
     /**
-     * Delete client
+     * Delete model
      * @param int $id
      * @return mixed
      */
     public function delete(int $id)
     {
         return $this->getById($id)->delete();
+    }
+
+
+    /**
+     * Model attributes
+     * @return array
+     */
+    public function getAttributes() :array {
+        return $this->model->getFillable();
     }
 }

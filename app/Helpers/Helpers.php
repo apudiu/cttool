@@ -425,7 +425,7 @@ function currentSqlFormattedTime() {
  * @param string $timeString
  * @return string
  */
-function formatDateTimeSQL($timeString) {
+function formatDateTimeSQL($timeString='now') {
     return strftime('%F %T', strtotime($timeString));
 }
 

@@ -4,24 +4,45 @@
 
 @section('content')
 <div class="container">
+    <!--New data import-->
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">CSV Import</div>
 
                 <div class="card-body">
+
+                    <div class="alert alert-primary hidden" role="alert" id="csv-data-upload-alert">
+                        Processing, please wait ...
+                    </div>
+
                     @if (session('status'))
                         <div class="alert alert-success" role="alert">
                             {{ session('status') }}
                         </div>
                     @endif
 
-                    You are logged in!
+                        <form action="{{ route('csv.store') }}"
+                              method="POST"
+                              enctype="multipart/form-data"
+                              id="csv-upload-form">
+                            @csrf
+
+                            <div class="input-group">
+                                <div class="custom-file">
+                                    <input type="file" name="csv_file" accept=".csv">
+                                </div>
+                                <div class="input-group-append">
+                                    <button class="btn btn-secondary" type="submit">Upload</button>
+                                </div>
+                            </div>
+                        </form>
                 </div>
             </div>
         </div>
     </div>
-
+    
+    <!--Existing data display-->
     <div class="row justify-content-center">
         <div class="col">
             <div class="card mt-5">
@@ -68,5 +89,20 @@
 
 @section('onpage-js')
     <script>
+        $(document).ready(function() {
+
+            $('#csv-upload-form').submit(function(e) {
+                // preventing form upload
+                e.preventDefault();
+
+                // showing status
+                $('#csv-data-upload-alert').show();
+
+                // submitting form after * seconds
+                setTimeout(function () {
+                    $('#csv-upload-form')[0].submit();
+                }, 1500);
+            });
+        });
     </script>
 @endsection

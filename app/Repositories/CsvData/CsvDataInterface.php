@@ -9,20 +9,29 @@
 namespace App\Repositories\CsvData;
 
 
+use Illuminate\Support\Collection;
+
 interface CsvDataInterface
 {
-    // get all clients
+    // get all models
     public function getAll(int $limit = 0, array $with = []);
 
-    // get a client by id
+    // get a model by id
     public function getById(int $id, array $with = []);
 
-    // create a client
+    // create a model
     public function create(array $attributes);
 
-    // update a client
+    // create many models
+    public function createMany(array $attributes);
+
+    // update a model
     public function update(int $id, array $attributes);
 
-    // delete a client
+    // delete a model
     public function delete(int $id);
+
+
+    // model attributes
+    public function getAttributes() :array;
 }

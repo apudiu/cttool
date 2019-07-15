@@ -21,4 +21,5 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::prefix('csv')->group(function() {
     Route::get('/', 'CsvDataController@index')->name('csv.index');
+    Route::post('/store', 'CsvDataController@store')->name('csv.store');
 });
