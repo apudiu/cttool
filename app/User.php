@@ -44,4 +44,8 @@ class User extends Authenticatable
     public function csv_data() {
         return $this->hasMany(CsvData::class);
     }
+
+    public function files() {
+        return $this->hasMany(File::class);
+    }
 }

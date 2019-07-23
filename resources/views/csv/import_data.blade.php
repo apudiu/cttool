@@ -17,8 +17,11 @@
                     </div>
 
                     @if (session('status'))
-                        <div class="alert alert-success" role="alert">
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
                             {{ session('status') }}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
                         </div>
                     @endif
 
@@ -36,6 +39,11 @@
                                     <button class="btn btn-secondary" type="submit">Upload</button>
                                 </div>
                             </div>
+                            @if($errors->has('csv_file'))
+                                <div class="text-danger">
+                                    <span>{{ $errors->first('csv_file') }}</span>
+                                </div>
+                            @endif
                         </form>
                 </div>
             </div>

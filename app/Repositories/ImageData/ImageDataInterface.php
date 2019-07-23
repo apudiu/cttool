@@ -1,17 +1,9 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Apu
- * Date: 7/10/2019
- * Time: 1:07 PM
- */
+namespace App\Repositories\ImageData;
 
-namespace App\Repositories\CsvData;
+use App\File;
 
-
-use Illuminate\Support\Collection;
-
-interface CsvDataInterface
+interface ImageDataInterface
 {
     // get all models
     public function getAll(int $limit = 0, array $where = [], array $with = [], array $sort=['asc', 'created_at']);

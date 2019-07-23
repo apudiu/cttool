@@ -1,25 +1,17 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Apu
- * Date: 7/10/2019
- * Time: 1:07 PM
- */
+namespace App\Repositories\ImageData;
 
-namespace App\Repositories\CsvData;
+use App\File;
 
-use App\CsvData;
-use Illuminate\Support\Collection;
-
-class CsvDataRepository implements CsvDataInterface
+class ImageDataRepository implements ImageDataInterface
 {
     // Model (resolved by IoC/service container)
     private $model;
 
-    public function __construct(CsvData $csvData)
+    public function __construct(File $file)
     {
         // Getting model using Laravel service container (IoC container)
-        $this->model = $csvData;
+        $this->model = $file;
     }
 
     /**
@@ -98,6 +90,7 @@ class CsvDataRepository implements CsvDataInterface
     /**
      * Gives the model
      * This is NOT GOOD PRACTICE but doing it anyway
+     * @return File
      */
     public function model() {
         return $this->model;

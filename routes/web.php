@@ -23,3 +23,8 @@ Route::prefix('csv')->group(function() {
     Route::get('/', 'CsvDataController@index')->name('csv.index');
     Route::post('/store', 'CsvDataController@store')->name('csv.store');
 });
+
+Route::prefix('img')->group(function() {
+    Route::get('/', 'FileController@index')->name('img.index');
+    Route::post('/store', 'FileController@store')->name('img.store');
+});

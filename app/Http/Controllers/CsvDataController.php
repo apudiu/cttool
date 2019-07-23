@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\CsvData;
+use App\Http\Requests\CSVFileFormRequest;
 use App\Repositories\CsvData\CsvDataInterface;
 use EasyCSV\Reader;
 use Illuminate\Http\Request;
@@ -28,7 +29,7 @@ class CsvDataController extends Controller
     public function index()
     {
         // existing csv data
-        $csvData = $this->csvData->getAll(3);
+        $csvData = $this->csvData->getAll(3, [], [], ['desc', 'created_at']);
 
         $data = [
             'csvData' => $csvData,
@@ -43,7 +44,7 @@ class CsvDataController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CSVFileFormRequest $request)
     {
         // getting CSV file from request
         $csvFile = $request->file('csv_file');

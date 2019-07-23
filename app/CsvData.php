@@ -23,8 +23,21 @@ class CsvData extends Model
     /**
      * Relations
      */
+
+    /**
+     * Record owner
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function user() {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Model will be having many files (matching import batch)
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function files() {
+        return $this->belongsToMany(File::class);
     }
 
 

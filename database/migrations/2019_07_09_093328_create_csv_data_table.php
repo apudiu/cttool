@@ -18,7 +18,7 @@ class CreateCsvDataTable extends Migration
 
             // identify
             $table->unsignedBigInteger('user_id');
-            $table->integer('import_batch')->comment('import batch timestamp');
+            $table->integer('import_batch')->index('key')->comment('import batch timestamp');
 
             // CSV fields
             $table->string('document_path')->nullable()->comment('DocumentFileName');
