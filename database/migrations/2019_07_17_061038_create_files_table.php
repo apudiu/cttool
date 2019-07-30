@@ -19,7 +19,7 @@ class CreateFilesTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->integer('import_batch');
 
-            $table->string('name')->comment('file name');
+            $table->string('name')->index()->comment('file name');
             $table->string('path')->comment('full name');
 
             $table->timestamps();

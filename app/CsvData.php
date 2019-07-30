@@ -34,10 +34,10 @@ class CsvData extends Model
 
     /**
      * Model will be having many files (matching import batch)
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
-    public function files() {
-        return $this->belongsToMany(File::class);
+    public function file() {
+        return $this->hasOne(File::class, 'file_name', 'name');
     }
 
 

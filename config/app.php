@@ -233,4 +233,11 @@ return [
 
     ],
 
+    // file upload
+    'fileUpload' => [
+        'limit' => env('FILE_UPLOAD_LIMIT', 10000),
+        'extensions' => explode(',', env('FILE_ALLOWED_EXTENSONS', 'jpg,jpeg,tiff,pdf')),
+        'path' => env('FILE_UPLOAD_DIR', 'uploads')
+    ],
+
 ];

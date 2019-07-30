@@ -70,7 +70,7 @@ class CreateCsvDataTable extends Migration
             $table->string('digitized_by')->nullable()->comment('Digitized By');
             $table->string('file_type')->nullable()->comment('File Type');
             $table->string('batch')->nullable()->comment('Batch ID');
-            $table->string('file_name')->nullable()->comment('File Name');
+            $table->string('file_name')->index()->comment('File Name');
 
             $table->timestamps();
 

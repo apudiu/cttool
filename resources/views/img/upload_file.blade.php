@@ -16,7 +16,11 @@
                 </div>
             @endif
 
-            <file-upload :errors="{{ $errors }}" :csv_batches="{{ $csvBatches }}"></file-upload>
+            <file-upload
+                    :errors="{{ $errors }}"
+                    :csv_batches="{{ $csvBatches }}"
+                    :max_files_limit="{{ $maxFileLimit }}"
+                    :allowed_extensions="{{ $allowedExtensions }}"></file-upload>
 
         </div>
     </div>
@@ -66,8 +70,6 @@
 @section('onpage-js')
     <script>
         $(document).ready(function() {
-
-
         });
     </script>
 @endsection

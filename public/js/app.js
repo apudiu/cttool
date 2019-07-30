@@ -1926,7 +1926,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['errors', 'csv_batches'],
+  props: ['errors', 'csv_batches', 'max_files_limit', 'allowed_extensions'],
   data: function data() {
     return {
       config: {
@@ -1941,15 +1941,18 @@ __webpack_require__.r(__webpack_exports__);
       // csv files batch
       files: [],
       // selected files
-      maxFilesLimit: 10000,
-      // maximum number of files allowed
+      fileExtensions: '',
+      // allowed file extensions
       chunkSize: 3,
       // files to send at once (files will be sent by chinking them)
       uploadPercentage: 0 // successful upload percentage
 
     };
   },
-  mounted: function mounted() {},
+  mounted: function mounted() {
+    // preparing extensions to be used with input
+    this.prepareExtension(); // console.log(this.error);
+  },
   methods: {
     // Adds file
     addFiles: function addFiles() {
@@ -1959,8 +1962,19 @@ __webpack_require__.r(__webpack_exports__);
     submitFiles: function submitFiles() {
       var _this = this;
 
-      // prepared form data
-      var formDataList = this.prepareFormData(); // number or chunks sent to the server
+      // checking if batch is correct
+      if (!this.csv_batches.includes(this.batch)) {
+        alert('Please select correct batch');
+        return false;
+      } // prepared form data
+
+
+      var formDataList = this.prepareFormData();
+
+      if (formDataList === false) {
+        return false;
+      } // number or chunks sent to the server
+
 
       var submitCount = 0; // uploading every chunk of files
 
@@ -2007,19 +2021,38 @@ __webpack_require__.r(__webpack_exports__);
     handleFilesUpload: function handleFilesUpload() {
       var selectedFiles = this.$refs.files.files; // checking for max file limit
 
-      if (selectedFiles.length > this.maxFilesLimit || this.files.length >= this.maxFilesLimit) {
-        alert("Maximum of ".concat(this.maxFilesLimit, " files allowed."));
+      if (selectedFiles.length > this.max_files_limit || this.files.length >= this.max_files_limit) {
+        // if previous & current selection exceeds max limit
+        if (selectedFiles.length + this.files.length > this.max_files_limit) {
+          alert("Your current selection exceeds maximum files. Allowed: ".concat(this.max_files_limit));
+        } else {
+          alert("Maximum of ".concat(this.max_files_limit, " files allowed."));
+        }
+
         return false;
       } // Adds the selected file to the files array
 
 
       for (var i = 0; i < selectedFiles.length; i++) {
-        this.files.push(selectedFiles[i]);
+        var file = selectedFiles[i];
+        var fileExtension = file.name.substr(-3, 3).toLocaleLowerCase(); // include file only if its extension is allowed
+
+        if (this.allowed_extensions.includes(fileExtension)) {
+          this.files.push(file);
+        } else {
+          alert("File: \"".concat(file.name, "\" is not allowed and excluded from upload list."));
+        }
       }
     },
     // Removes a select file the user has uploaded
     removeFile: function removeFile(key) {
       this.files.splice(key, 1);
+    },
+    // prepares file extensions to be used in file input
+    prepareExtension: function prepareExtension() {
+      this.fileExtensions = _.join(this.allowed_extensions.map(function (item) {
+        return ".".concat(item);
+      }), ',');
     }
   }
 });
@@ -38027,7 +38060,7 @@ var render = function() {
                   attrs: {
                     type: "file",
                     id: "files",
-                    accept: ".jpg,.jpeg,.tiff,.pdf",
+                    accept: _vm.fileExtensions,
                     multiple: ""
                   },
                   on: { change: _vm.handleFilesUpload }
@@ -50479,7 +50512,30 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports) {
 
+/**
+ * Creates string of array
+ * @param arr   array   input array
+ * @param glu   string   delimiter string [,]
+ * @param prefixOrSuffixValue   string|bool  prefix of suffix value [false]
+ * @param prefix    bool    true fo prefix or false for suffix
+ * @returns {string}
+ */
+window.implode = function (arr) {
+  var glu = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : ',';
+  var prefixOrSuffixValue = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+  var prefix = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : true;
+  return _.join(arr.map(function (item) {
+    var newItem = item; // if prefix or suffix requested
 
+    if (prefixOrSuffixValue) {
+      // prefix or suffix to be used
+      newItem = prefix ? "".concat(prefixOrSuffixValue).concat(item) : "".concat(item).concat(prefixOrSuffixValue);
+    } // returning modified item
+
+
+    return newItem;
+  }), glu);
+};
 
 /***/ }),
 

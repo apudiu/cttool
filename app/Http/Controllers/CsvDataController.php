@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\CsvData;
+use App\Exceptions\CSVException;
 use App\Http\Requests\CSVFileFormRequest;
 use App\Repositories\CsvData\CsvDataInterface;
 use EasyCSV\Reader;
@@ -50,58 +51,19 @@ class CsvDataController extends Controller
         $csvFile = $request->file('csv_file');
 
         // getting values from CSV
-        $rows = $this->getCSVValues($csvFile);
+        try {
+
+            $rows = $this->getCSVValues($csvFile);
+
+        } catch (CSVException $e) {
+            return redirect()->back()->with('status', $e->getMessage());
+        }
 
         // inserting into DB
         $this->csvData->createMany($rows);
 
         // redirecting back
         return redirect()->back()->with('status', 'All data has been imported.');
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\CsvData  $csvData
-     * @return \Illuminate\Http\Response
-     */
-    public function show(CsvData $csvData)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\CsvData  $csvData
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(CsvData $csvData)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\CsvData  $csvData
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, CsvData $csvData)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\CsvData  $csvData
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(CsvData $csvData)
-    {
-        //
     }
 
 
@@ -111,12 +73,19 @@ class CsvDataController extends Controller
      *
      * @param $csvFile
      * @return array
+     * @throws CSVException
      */
     protected function getCSVValues($csvFile) {
 
         // get all CSV content
         $csv = new Reader($csvFile);
         $data = $csv->getAll();
+
+        // return if csv contains more than allowed max
+        if (count($data) > config('app.fileUpload.limit')) {
+            $max = config('app.fileUpload.limit');
+            throw new CSVException('Max limit exceeded. Maximum of ' . $max . ' rows allowed', 413);
+        }
 
         $userId = getAuthUser()->id;
         $batch  = time();

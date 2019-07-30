@@ -24,9 +24,9 @@ class File extends Model
 
     /**
      * Model will be having many csv data record (matching with import batch)
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function csv_data() {
-        return $this->belongsToMany(CsvData::class);
+        return $this->belongsTo(CsvData::class, 'file_name', 'name');
     }
 }

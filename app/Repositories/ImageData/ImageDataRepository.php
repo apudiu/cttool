@@ -61,7 +61,7 @@ class ImageDataRepository implements ImageDataInterface
      */
     public function createMany(array $attributes)
     {
-        return getAuthUser()->csv_data()->createMany($attributes);
+        return getAuthUser()->files()->createMany($attributes);
     }
 
     /**

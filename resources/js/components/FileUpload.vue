@@ -24,7 +24,7 @@
                                 <input type="file"
                                        id="files"
                                        ref="files"
-                                       accept=".jpg,.jpeg,.tiff,.pdf"
+                                       :accept="fileExtensions"
                                        multiple
                                        @change="handleFilesUpload">
                             </div>
@@ -86,7 +86,7 @@
     import axios from "axios";
 
     export default {
-        props: ['errors', 'csv_batches'],
+        props: ['errors', 'csv_batches', 'max_files_limit', 'allowed_extensions'],
         data(){
             return {
                 config: {       // Axios config
@@ -98,7 +98,7 @@
 
                 batch: 'Select CSV Batch',  // csv files batch
                 files: [],      // selected files
-                maxFilesLimit: 10000,   // maximum number of files allowed
+                fileExtensions: '',     // allowed file extensions
 
                 chunkSize: 3,   // files to send at once (files will be sent by chinking them)
                 uploadPercentage: 0 // successful upload percentage
@@ -107,6 +107,11 @@
 
 
         mounted() {
+
+            // preparing extensions to be used with input
+            this.prepareExtension();
+
+            // console.log(this.error);
         },
 
 
@@ -120,8 +125,17 @@
             // Submits files to the server
             submitFiles() {
 
+                // checking if batch is correct
+                if (!this.csv_batches.includes(this.batch)) {
+                    alert('Please select correct batch');
+                    return false;
+                }
+
                 // prepared form data
                 let formDataList = this.prepareFormData();
+                if(formDataList ===false) {
+                    return false;
+                }
 
                 // number or chunks sent to the server
                 let submitCount = 0;
@@ -153,7 +167,6 @@
 
             // chunks and appends extra data to formData
             prepareFormData() {
-
                 let chunks = _.chunk(this.files, this.chunkSize);
 
                 // chucking files as sending very large amount of files is not good idea
@@ -181,20 +194,43 @@
                 let selectedFiles = this.$refs.files.files;
 
                 // checking for max file limit
-                if (selectedFiles.length > this.maxFilesLimit || this.files.length >= this.maxFilesLimit) {
-                    alert(`Maximum of ${this.maxFilesLimit} files allowed.`);
+                if (selectedFiles.length > this.max_files_limit || this.files.length >= this.max_files_limit) {
+
+                    // if previous & current selection exceeds max limit
+                    if ((selectedFiles.length + this.files.length) > this.max_files_limit) {
+                        alert(`Your current selection exceeds maximum files. Allowed: ${this.max_files_limit}`);
+                    } else {
+                        alert(`Maximum of ${this.max_files_limit} files allowed.`);
+                    }
+
                     return false;
                 }
 
                 // Adds the selected file to the files array
                 for(let i = 0; i < selectedFiles.length; i++){
-                    this.files.push( selectedFiles[i] );
+
+                    let file = selectedFiles[i];
+                    let fileExtension = file.name.substr(-3, 3).toLocaleLowerCase();
+
+                    // include file only if its extension is allowed
+                    if (this.allowed_extensions.includes(fileExtension)) {
+                        this.files.push(file);
+                    } else {
+                        alert(`File: "${file.name}" is not allowed and excluded from upload list.`);
+                    }
                 }
             },
 
             // Removes a select file the user has uploaded
             removeFile(key) {
                 this.files.splice(key, 1);
+            },
+
+            // prepares file extensions to be used in file input
+            prepareExtension() {
+                this.fileExtensions = _.join(this.allowed_extensions.map(item => {
+                    return `.${item}`;
+                }), ',');
             }
         }
     }
