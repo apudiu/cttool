@@ -24,7 +24,7 @@ class CreateCsvDataTable extends Migration
             $table->string('document_path')->nullable()->comment('DocumentFileName');
             $table->string('client_id')->nullable()->comment('Client_ID');
             $table->string('ca_or_file_sl')->nullable()->comment('CA No/File SL No');
-            $table->string('document_type')->nullable()->comment('Document_Type');
+            $table->string('Document_Type')->nullable()->comment('Document_Type');
             $table->string('customer')->nullable()->comment('Customer Name');
             $table->string('father')->nullable()->comment('Fathers Name');
             $table->string('mother')->nullable()->comment('Mothers Name');

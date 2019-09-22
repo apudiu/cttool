@@ -1,14 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData">
+  <component name="PublishConfigData" autoUpload="Always" serverName="CTTOOL">
     <serverData>
-      <paths name="AuthApp">
+      <paths name="CTTOOL">
         <serverdata>
           <mappings>
-            <mapping local="$PROJECT_DIR$" web="/" />
+            <mapping deploy="/php73/dev/cttool" local="$PROJECT_DIR$" web="/" />
           </mappings>
+          <excludedPaths>
+            <excludedPath path="/php73/dev/cttool/.git" />
+            <excludedPath path="/php73/dev/cttool/.idea" />
+            <excludedPath path="/php73/dev/cttool/node_modules" />
+            <excludedPath path="/php73/dev/cttool/vendor" />
+            <excludedPath path="/php73/dev/cttool/.env" />
+          </excludedPaths>
         </serverdata>
       </paths>
     </serverData>
+    <option name="myAutoUpload" value="ALWAYS" />
   </component>
 </project>

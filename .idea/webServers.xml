@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="a6aff6a6-276a-46f8-a91d-4ed1281109b1" name="CTTOOL" url="http://vm.cttool.devl">
+        <fileTransfer host="192.168.0.162" port="22" rootFolder="/var/www/html" accessType="SFTP">
+          <option name="port" value="22" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

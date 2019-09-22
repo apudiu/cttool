@@ -10,3 +10,14 @@ body {
 .hidden {
   display: none;
 }
+
+.text-bold {
+  font-weight: bold !important;
+}
+
+// console height
+#console {
+  max-height: 350px;
+  overflow: auto;
+}
+

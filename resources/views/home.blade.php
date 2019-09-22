@@ -7,7 +7,22 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">Batches</div>
+                <div class="card-header">
+                    <div class="d-inline">Batches</div>
+                    <div class="float-right">
+                        <div class="btn-group">
+                            <button type="button"
+                                    class="btn btn-sm btn-primary dropdown-toggle"
+                                    data-toggle="dropdown">
+                                Process
+                            </button>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item process" href="#" data-dry="1">DryRun</a>
+                                <a class="dropdown-item process" href="#" data-dry="0">Run</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
                 <div class="card-body">
                     @if (session('status'))
@@ -23,7 +38,7 @@
                                 <th>#</th>
                                 <th>Batch</th>
                                 <th>Records</th>
-                                <th>Action</th>
+                                <th>Date</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -32,9 +47,7 @@
                                     <td>{{ ($loop->index + 1) }}</td>
                                     <td>{{ $batch->import_batch }}</td>
                                     <td>{{ $batch->count }}</td>
-                                    <td>
-                                        <button class="btn btn-sm btn-secondary batch-button">Process</button>
-                                    </td>
+                                    <td>{{ formatDateTimeFromStamp($batch->import_batch) }}</td>
                                 </tr>
                             @empty
                                 <tr>
@@ -44,6 +57,22 @@
                             </tbody>
                         </table>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <div class="card mt-3">
+                <div class="card-header">Console</div>
+
+                <div class="card-body bg-dark text-white" id="console">
+                    @if (session('status'))
+                        <div class="alert alert-success" role="alert">
+                            {{ session('status') }}
+                        </div>
+                    @endif
+
+                    <div id="log"></div>
                 </div>
             </div>
         </div>

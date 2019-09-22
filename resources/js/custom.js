@@ -23,3 +23,34 @@ window.implode = function(arr, glu=',', prefixOrSuffixValue=false, prefix=true) 
     }), glu);
 };
 
+window.clickToClick = function (source, dest) {
+    // when source clicked
+    $(source).click(function (e) {
+
+        // clicking destination
+        $(dest).click();
+    })
+};
+
+(function () {
+
+    // handling file upload process
+    $('.process').click(function (e) {
+
+        //dry run requested or not
+        let dryRun = $(this).data('dry');
+
+        axios
+            .post('/home/process', {
+                dry: dryRun
+            })
+            .then(function (res) {
+
+                // add to the console
+                $('#console #log').append(res.data);
+            })
+            .catch(function (err) {
+                console.log(err);
+            });
+    });
+})();

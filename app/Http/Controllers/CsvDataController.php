@@ -108,7 +108,7 @@ class CsvDataController extends Controller
             // add user_id, import_batch and file_name in the row
             $userId = ['user_id' => $userId];
             $batch = ['import_batch' => $batch];
-            $fileName = ['file_name' => basename($item['document_path'])];
+            $fileName = ['file_name' => mb_basename($item['document_path'])];
 
             $item = array_merge($userId, $batch, $item, $fileName);
 

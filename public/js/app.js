@@ -50537,6 +50537,30 @@ window.implode = function (arr) {
   }), glu);
 };
 
+window.clickToClick = function (source, dest) {
+  // when source clicked
+  $(source).click(function (e) {
+    // clicking destination
+    $(dest).click();
+  });
+};
+
+(function () {
+  // handling file upload process
+  $('.process').click(function (e) {
+    //dry run requested or not
+    var dryRun = $(this).data('dry');
+    axios.post('/home/process', {
+      dry: dryRun
+    }).then(function (res) {
+      // add to the console
+      $('#console #log').append(res.data);
+    })["catch"](function (err) {
+      console.log(err);
+    });
+  });
+})();
+
 /***/ }),
 
 /***/ "./resources/sass/app.scss":

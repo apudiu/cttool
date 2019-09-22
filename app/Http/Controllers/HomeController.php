@@ -4,10 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Repositories\CsvData\CsvDataInterface;
 use App\Repositories\ImageData\ImageDataInterface;
+use App\Setting;
+use App\Traits\Bash;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
+    use Bash;
+
     protected $file, $csv;
 
     /**
@@ -39,9 +43,17 @@ class HomeController extends Controller
             ->get();
 
         $data = [
-            'batches' => $batches
+            'batches' => $batches,
         ];
 
         return view('home', $data);
+    }
+
+    public function bulkUpload(Request $request) {
+
+        // if dry run requested
+        $dryRun = ($request->get('dry'));
+
+        return $this->executeRunner($dryRun);
     }
 }

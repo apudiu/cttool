@@ -10657,3 +10657,12 @@ body {
   display: none;
 }
 
+.text-bold {
+  font-weight: bold !important;
+}
+
+#console {
+  max-height: 350px;
+  overflow: auto;
+}
+

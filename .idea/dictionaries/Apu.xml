@@ -2,6 +2,7 @@
   <dictionary name="Apu">
     <words>
       <w>axios</w>
+      <w>docudex</w>
     </words>
   </dictionary>
 </component>

@@ -18,6 +18,8 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+// doing it here for the sake of time
+Route::post('/home/process', 'HomeController@bulkUpload')->name('home.upload');
 
 Route::prefix('csv')->group(function() {
     Route::get('/', 'CsvDataController@index')->name('csv.index');
@@ -27,4 +29,9 @@ Route::prefix('csv')->group(function() {
 Route::prefix('img')->group(function() {
     Route::get('/', 'FileController@index')->name('img.index');
     Route::post('/store', 'FileController@store')->name('img.store');
+});
+
+Route::prefix('setting')->group(function() {
+    Route::get('/', 'SettingController@index')->name('setting.index');
+    Route::post('/store', 'SettingController@store')->name('setting.store');
 });
