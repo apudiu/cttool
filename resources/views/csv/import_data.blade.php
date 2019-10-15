@@ -8,8 +8,14 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">CSV Import</div>
-
+                <div class="card-header">
+                    <div class="d-inline">CSV Import</div>
+                    <div class="float-right">
+                        <div class="d-inline hidden mr-1 loading">
+                            <img class="" src="{{ asset('imgs/spinner.gif') }}" alt="Spinner img">
+                        </div>
+                    </div>
+                </div>
                 <div class="card-body">
 
                     <div class="alert alert-primary hidden" role="alert" id="csv-data-upload-alert">
@@ -36,7 +42,7 @@
                                     <input type="file" name="csv_file" accept=".csv">
                                 </div>
                                 <div class="input-group-append">
-                                    <button class="btn btn-secondary" type="submit">Upload</button>
+                                    <button class="btn btn-secondary csv-upload-btn" type="submit">Upload</button>
                                 </div>
                             </div>
                             @if($errors->has('csv_file'))
@@ -54,7 +60,21 @@
     <div class="row justify-content-center">
         <div class="col">
             <div class="card mt-5">
-                <div class="card-header">CSV Data</div>
+                <div class="card-header">
+                    <div class="d-inline">CSV Data</div>
+                    <div class="float-right">
+                        <a class="btn btn-sm btn-primary"
+                           href="#"
+                           onclick="event.preventDefault();document.getElementById('csv-delete-form').submit();">Clear Data</a>
+                        <form action="{{ route('csv.delete') }}"
+                              method="post"
+                              id="csv-delete-form"
+                              hidden>
+                            @csrf
+                            @method('delete')
+                        </form>
+                    </div>
+                </div>
 
                 <div class="card-body">
                     <div class="table-responsive">

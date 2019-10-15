@@ -10,6 +10,9 @@
                 <div class="card-header">
                     <div class="d-inline">Batches</div>
                     <div class="float-right">
+                        <div class="d-inline hidden mr-1 loading">
+                            <img class="" src="{{ asset('imgs/spinner.gif') }}" alt="Spinner img">
+                        </div>
                         <div class="btn-group">
                             <button type="button"
                                     class="btn btn-sm btn-primary dropdown-toggle"
@@ -63,7 +66,12 @@
 
         <div class="col-md-8">
             <div class="card mt-3">
-                <div class="card-header">Console</div>
+                <div class="card-header">
+                    <div class="d-inline">Console</div>
+                    <div class="float-right">
+                        <button type="button" class="btn btn-sm btn-secondary" id="console-clear">Clear</button>
+                    </div>
+                </div>
 
                 <div class="card-body bg-dark text-white" id="console">
                     @if (session('status'))

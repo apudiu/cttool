@@ -40,6 +40,9 @@ window.clickToClick = function (source, dest) {
         //dry run requested or not
         let dryRun = $(this).data('dry');
 
+        //show spinner
+        $('.loading').toggleClass('hidden');
+
         axios
             .post('/home/process', {
                 dry: dryRun
@@ -48,9 +51,24 @@ window.clickToClick = function (source, dest) {
 
                 // add to the console
                 $('#console #log').append(res.data);
+
+                // hide spinner
+                $('.loading').toggleClass('hidden');
             })
             .catch(function (err) {
                 console.log(err);
             });
+    });
+
+    // csv upload
+    $('.csv-upload-btn').click(function (e) {
+
+        //show spinner
+        $('.loading').toggleClass('hidden');
+    });
+
+    // handling console clear
+    $('#console-clear').click(function (e) {
+        $('#console #log').html('');
     });
 })();

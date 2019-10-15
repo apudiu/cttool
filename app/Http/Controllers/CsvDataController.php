@@ -67,6 +67,19 @@ class CsvDataController extends Controller
     }
 
 
+    /**
+     * Deletes all CSV data
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function destroy() {
+
+        // deleting all csv data (know that its not that efficient)
+        getAuthUser()->csv_data()->delete();
+
+        // redirect
+        return redirect()->back()->with('status', 'CSV Cleared.');
+    }
+
 
     /**
      * Gets all CSV rows

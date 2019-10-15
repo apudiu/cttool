@@ -54,6 +54,9 @@ class HomeController extends Controller
         // if dry run requested
         $dryRun = ($request->get('dry'));
 
-        return $this->executeRunner($dryRun);
+        // execute command
+        $log = $this->executeRunner($dryRun);
+
+        return $log;
     }
 }

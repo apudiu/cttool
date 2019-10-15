@@ -12,7 +12,8 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+//    return view('welcome');
+    return redirect()->route('login');
 });
 
 Auth::routes();
@@ -24,6 +25,7 @@ Route::post('/home/process', 'HomeController@bulkUpload')->name('home.upload');
 Route::prefix('csv')->group(function() {
     Route::get('/', 'CsvDataController@index')->name('csv.index');
     Route::post('/store', 'CsvDataController@store')->name('csv.store');
+    Route::delete('/delete', 'CsvDataController@destroy')->name('csv.delete');
 });
 
 Route::prefix('img')->group(function() {
@@ -33,5 +35,5 @@ Route::prefix('img')->group(function() {
 
 Route::prefix('setting')->group(function() {
     Route::get('/', 'SettingController@index')->name('setting.index');
-    Route::post('/store', 'SettingController@store')->name('setting.store');
+    Route::post('/update', 'SettingController@update')->name('setting.update');
 });

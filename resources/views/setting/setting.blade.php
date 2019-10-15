@@ -16,7 +16,8 @@
                         </div>
                     @endif
 
-                        <form action="{{ route('setting.store') }}" method="post" autocomplete="off" id="setting-form">
+                        <form action="{{ route('setting.update') }}" method="post" autocomplete="off" id="setting-form">
+                            @csrf
                             <div class="form-group">
                                 <label for="phpname">PHP Name</label>
                                 <input type="text"

@@ -14,8 +14,8 @@ class UsersTableSeeder extends Seeder
     {
         // creating single user
         User::create([
-            'name' => 'Mohammad Ali Apu',
-            'email' => 'apu@devnetlimited.com',
+            'name' => 'User1',
+            'email' => 'user1@cbl.com.bd',
             'password' => bcrypt('123456789'),
             'created_at' => formatDateTimeSQL(),
             'updated_at' => formatDateTimeSQL()

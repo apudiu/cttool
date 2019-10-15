@@ -69,4 +69,14 @@ class RegisterController extends Controller
             'password' => Hash::make($data['password']),
         ]);
     }
+
+    /**
+     * Show the application registration form.
+     */
+    public function showRegistrationForm()
+    {
+        // disabling registration
+        return "<h1>Registration disabled!</h1>";
+        // return view('auth.register');
+    }
 }

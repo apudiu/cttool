@@ -26,25 +26,25 @@
                         </li>
                     @endif
                 @else
-                    <li class="nav-item">
+                    <li class="nav-item {{ ifRoute('home', 'active') }}">
                         <a class="nav-link"
                            href="{{ route('home') }}">
                             Home
                         </a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item {{ ifRoute('csv.index', 'active') }}">
                         <a class="nav-link"
                            href="{{ route('csv.index') }}">
                             CSV
                         </a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item {{ ifRoute('img.index', 'active') }}">
                         <a class="nav-link"
                            href="{{ route('img.index') }}">
                             File
                         </a>
                     </li>
-                    <li class="nav-item dropdown">
+                    <li class="nav-item dropdown {{ ifRoute('setting.index', 'active') }}">
                         <a id="navbarDropdown"
                            class="nav-link dropdown-toggle"
                            href="#"
