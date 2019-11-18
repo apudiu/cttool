@@ -11,6 +11,11 @@ const mix = require('laravel-mix');
  |
  */
 
+// prevent file copy in css url block/function
+mix.options({
+    processCssUrls: false
+});
+
 mix
     .js([
         'resources/js/app.js',

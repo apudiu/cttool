@@ -35,6 +35,7 @@ trait Bash {
         // document upload (runner)
         $cmd = "cd {$s->docudex_path};{$s->php_name} app/console docudex:bulk-import-runner --path='{$s->files_path}' --size=1000 --concurrent=2";
 
+        // execute
         if ($dryRun) {
             $log = $this->execute($cmdDry);
         } else {
@@ -46,7 +47,23 @@ trait Bash {
             }
         }
 
-        // execute
+        // remove duplicates
+
+        // making all line ending chars same
+        $log = str_replace("\r", "\n", $log);
+
+        // make array of string
+        $log = explode("\n", $log);
+
+        // removing duplicated entries
+        $log = array_unique($log);
+
+        // returning back to string
+        $log = implode("", $log);
+
+        // we can do it one line with no comment, super bad idea may be.
+        // $log = implode("", array_unique(explode("\n", str_replace("\r", "\n", $log))));
+
         return $log;
     }
 

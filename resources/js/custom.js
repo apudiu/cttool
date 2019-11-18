@@ -71,4 +71,25 @@ window.clickToClick = function (source, dest) {
     $('#console-clear').click(function (e) {
         $('#console #log').html('');
     });
+
+    // handling report page
+    let dateRangeConfig = {
+        opens: 'left',
+        linkedCalendars: false,
+        showDropdowns: true,
+        autoUpdateInput: false
+    };
+
+    $('#report-date-range').daterangepicker(dateRangeConfig)
+        .on('apply.daterangepicker', function(ev, picker) {
+            // updating hidden input fields formatted value
+            $('#report-d-range').val(`${picker.startDate.format('YYYY/MM/DD')},${picker.endDate.format('YYYY/MM/DD')}`);
+
+            // placing date range to current input
+            $(this).val(picker.startDate.format('YYYY/MM/DD') + ' - ' + picker.endDate.format('YYYY/MM/DD'));
+        })
+        .on('cancel.daterangepicker', function(ev, picker) {
+            $(this).val('Select date range');
+        })
+    ;
 })();

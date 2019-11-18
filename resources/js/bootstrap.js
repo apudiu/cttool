@@ -10,6 +10,9 @@ try {
     window.Popper = require('popper.js').default;
     window.$ = window.jQuery = require('jquery');
 
+    require('moment');
+    require('daterangepicker');
+
     require('bootstrap');
 } catch (e) {
     // console.info(e);

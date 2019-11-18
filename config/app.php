@@ -240,4 +240,9 @@ return [
         'path' => env('FILE_UPLOAD_DIR', 'uploads')
     ],
 
+    'report' => [
+        'status' => ['SUCCESS', 'FAILURE'],
+        'per-page' => 20
+    ],
+
 ];

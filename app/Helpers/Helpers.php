@@ -612,4 +612,13 @@ function tailFile($filepath, $lines = 1000) {
     return trim(implode("", array_slice(file($filepath), -$lines)));
 }
 
+/**
+ * Return specific setting
+ * @param $settingName
+ * @return mixed
+ */
+function getSetting($settingName) {
+    return \App\Setting::first()->$settingName;
+}
+
 

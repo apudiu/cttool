@@ -37,3 +37,7 @@ Route::prefix('setting')->group(function() {
     Route::get('/', 'SettingController@index')->name('setting.index');
     Route::post('/update', 'SettingController@update')->name('setting.update');
 });
+
+Route::prefix('report')->group(function() {
+    Route::get('/', 'ReportController@index')->name('report.index');
+});

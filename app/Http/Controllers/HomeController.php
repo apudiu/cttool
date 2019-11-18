@@ -6,11 +6,12 @@ use App\Repositories\CsvData\CsvDataInterface;
 use App\Repositories\ImageData\ImageDataInterface;
 use App\Setting;
 use App\Traits\Bash;
+use App\Traits\Report;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
-    use Bash;
+    use Bash, Report;
 
     protected $file, $csv;
 
@@ -24,6 +25,9 @@ class HomeController extends Controller
     {
         $this->middleware('auth');
 
+        // initiating trait constructor (like) function
+        $this->reportConstruct();
+
         // getting repo's
         $this->file = $img;
         $this->csv = $csv;
@@ -35,7 +39,8 @@ class HomeController extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function index()
-    {
+    {   $this->getResultFromFile();
+
         $batches = $this->csv->model()
             ->selectRaw('import_batch, COUNT(*) AS count')
             ->orderByDesc('import_batch')
@@ -49,6 +54,12 @@ class HomeController extends Controller
         return view('home', $data);
     }
 
+    /**
+     * Bulk upload files with an option to dry run
+     * @param Request $request
+     * @return string
+     * @throws \App\Exceptions\FileNotFoundException
+     */
     public function bulkUpload(Request $request) {
 
         // if dry run requested
@@ -57,6 +68,14 @@ class HomeController extends Controller
         // execute command
         $log = $this->executeRunner($dryRun);
 
-        return $log;
+        // logging report
+        if (!$dryRun) {
+            $this->logReport();
+
+            // Send count of processed files for the user
+            $log = $log . "<br />" . "Success: {$this->getResultCount('success')}, Failure: {$this->getResultCount('failure')}";
+        }
+
+        return $log ?? 'No log available!';
     }
 }

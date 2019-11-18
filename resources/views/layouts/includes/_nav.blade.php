@@ -57,6 +57,7 @@
                         </a>
 
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="{{ route('report.index') }}">Report</a>
                             <a class="dropdown-item" href="{{ route('setting.index') }}">Setting</a>
 
                             <div class="dropdown-divider"></div>
