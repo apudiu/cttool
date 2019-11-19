@@ -76,7 +76,10 @@
                 </div>
 
                 <div class="card-footer">
-                    {!! $report->render() !!}
+                    {{--Links only if pagination exists--}}
+                    @if(method_exists($report, 'render'))
+                        {!! $report->render() !!}
+                    @endif
                 </div>
             </div>
         </div>

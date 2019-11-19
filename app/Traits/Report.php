@@ -83,7 +83,10 @@ trait Report {
 
         // checking file existence
         if (!file_exists($this->resultFilePath)) {
-            throw new FileNotFoundException("Report file: {$this->resultFilePath} is not available.");
+            // throw new FileNotFoundException("Report file: {$this->resultFilePath} is not available.");
+
+            // creating the empty report file
+            $this->createFile($this->resultFilePath);
         }
 
         // getting raw file content
@@ -145,5 +148,14 @@ trait Report {
         }
 
         return $data;
+    }
+
+    /**
+     * Creates specified files
+     * @param string $filePath
+     */
+    private function createFile($filePath) {
+        $fileHandler = fopen($filePath, 'w');
+        fclose($fileHandler);
     }
 }

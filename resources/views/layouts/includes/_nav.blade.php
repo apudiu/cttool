@@ -44,7 +44,7 @@
                             File
                         </a>
                     </li>
-                    <li class="nav-item dropdown {{ ifRoute('setting.index', 'active') }}">
+                    <li class="nav-item dropdown {{ ifRoute(['setting.index','report.index'], 'active') }}">
                         <a id="navbarDropdown"
                            class="nav-link dropdown-toggle"
                            href="#"

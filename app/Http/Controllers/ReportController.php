@@ -26,9 +26,9 @@ class ReportController extends Controller
             // preparing date range
             $dateRange = $this->prepareDateRange($rawDateRange);
 
-            $report = Report::whereBetween('time', $dateRange)->paginate($perPageRecords);
+            $report = Report::orderByDesc('time')->whereBetween('time', $dateRange)->get();
         } else {
-            $report = Report::paginate($perPageRecords);
+            $report = Report::orderByDesc('time')->paginate($perPageRecords);
         }
 
         $data = [

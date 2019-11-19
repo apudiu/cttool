@@ -24,6 +24,11 @@ trait Bash {
         'FAILURE' => '<span class="text-danger">FAILURE</span>'
     ];
 
+    /**
+     * Runs the command and return the log
+     * @param bool $dryRun
+     * @return array|mixed|string
+     */
     public function executeRunner($dryRun = true) {
 
         // setting
@@ -38,6 +43,7 @@ trait Bash {
         // execute
         if ($dryRun) {
             $log = $this->execute($cmdDry);
+            $log = $this->separateLogByStatus($log); // kind of bad practise, but doing it anyway
         } else {
             $log = $this->execute($cmd);
 
@@ -87,7 +93,7 @@ trait Bash {
      * Executes shell command and return output upon
      * command completion
      * @param string $cmd   Shell command
-     * @return string       Comand output
+     * @return string       Command output
      */
     private function execute(string $cmd) {
         // execute
@@ -120,5 +126,39 @@ trait Bash {
         }
 
         return $result;
+    }
+
+    /**
+     * Separates log entries by status
+     * @param string $log
+     * @return string
+     */
+    private function separateLogByStatus(string $log) :string {
+
+        // SUCCESS
+        $reportStatus = config('app.report.status')[1];
+
+        // logs segregated by status
+        $logs = [
+            'success' => '====| Success |==== <br />',
+            'failure' => '====| Failure |==== <br />'
+        ];
+
+        // array of longs
+        $log = explode("\n", $log);
+
+        foreach ($log as $line) {
+
+            // if status is SUCCESS
+            if (strpos($line, $reportStatus)) {
+
+                $logs['failure'] = $logs['failure'] . $line;
+            } else {
+                $logs['success'] = $logs['success'] . $line;
+            }
+        }
+
+        // returning string
+        return $logs['failure'] . '<br />' . $logs['success'];
     }
 }
