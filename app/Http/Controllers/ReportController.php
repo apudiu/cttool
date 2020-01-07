@@ -20,20 +20,42 @@ class ReportController extends Controller
     {
         $perPageRecords = config('app.report.per-page');
         $rawDateRange = request()->get('date-range');
+        $batch = request()->get('batch');
 
-        // paginate according to user date range if available
-        if (request()->has('date-range')) {
-            // preparing date range
-            $dateRange = $this->prepareDateRange($rawDateRange);
+        // Applying user filters to report
+        // preparing date range
+        $dateRange = $this->prepareDateRange($rawDateRange);
 
-            $report = Report::orderByDesc('time')->whereBetween('time', $dateRange)->get();
-        } else {
-            $report = Report::orderByDesc('time')->paginate($perPageRecords);
+        if ($this->requestHas('date-range') && $this->requestHas('batch')) { // both date range & batch
+
+            $report = Report::orderByDesc('time')
+                ->where('import_batch',$batch)
+                ->whereBetween('time', $dateRange)
+                ->get();
+
+        } elseif ($this->requestHas('date-range')) { // date range only
+
+            $report = Report::orderByDesc('time')
+                ->whereBetween('time', $dateRange)
+                ->get();
+
+        } elseif ($this->requestHas('batch')) { // batch only
+
+            $report = Report::orderByDesc('time')
+                ->where('import_batch', $batch)
+                ->get();
+
+        } else { // all records
+            $report = Report::orderByDesc('time')
+                ->paginate($perPageRecords);
         }
+        
 
         $data = [
+            'batch' => $batch,
             'report' => $report,
-            'rawDateRange' => str_replace(',', ' - ', $rawDateRange), // formatting raw
+            'dateRange' => str_replace(',', ' - ', $rawDateRange),
+            'rawDateRange' => $rawDateRange, // formatting raw
         ];
 
         return view('report.report', $data);
@@ -58,5 +80,28 @@ class ReportController extends Controller
         }
 
         return $dateRange;
+    }
+
+    /**
+     * Checks if a given key exists in request and not empty
+     * @param string $paramName
+     * @return bool
+     */
+    private function requestHas(string $paramName) :bool {
+
+        $requestValue = request()->get($paramName);
+
+        if (request()->has($paramName)) {
+
+            if (!empty($requestValue)) {
+
+                return true;
+            } else {
+                return false;
+            }
+
+        } else {
+            return false;
+        }
     }
 }

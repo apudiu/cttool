@@ -5,6 +5,7 @@
 namespace App\Traits;
 
 
+use App\CsvData;
 use App\Setting;
 
 trait Bash {
@@ -14,6 +15,11 @@ trait Bash {
      * @var bool
      */
     private $deleteAssociated = true;
+
+    /**
+     * Import batch
+     */
+    public $importBatch;
 
     /**
      * Keys will be replaces with values in result
@@ -36,18 +42,22 @@ trait Bash {
 
         // command
         // dry run
+        // php docudex/app/console docudex:bulk-import-documents --path='files_path' --config='config_path.yml' --dry-run=1
         $cmdDry = "{$s->php_name} {$s->docudex_path}/app/console docudex:bulk-import-documents --path='{$s->files_path}' --config='{$s->config_path}' --dry-run=1";
         // document upload (runner)
         $cmd = "cd {$s->docudex_path};{$s->php_name} app/console docudex:bulk-import-runner --path='{$s->files_path}' --size=1000 --concurrent=2";
 
         // execute
+        // storing last import batch
+        $this->importBatch = $this->getImportBatch();
+
         if ($dryRun) {
             $log = $this->execute($cmdDry);
             $log = $this->separateLogByStatus($log); // kind of bad practise, but doing it anyway
         } else {
             $log = $this->execute($cmd);
 
-            // delete associated records
+            // delete associated records (csv data & files (from db only))
             if ($this->deleteAssociated) {
                 $this->deleteAssociated();
             }
@@ -159,6 +169,15 @@ trait Bash {
         }
 
         // returning string
-        return $logs['failure'] . '<br />' . $logs['success'];
+        return 'Batch: ' . $this->getImportBatch() . '<br />' . $logs['failure'] . '<br />' . $logs['success'];
+    }
+
+    /**
+     * Returns import batch no. of current batch
+     * @return int
+     */
+    private function getImportBatch() {
+        // not usin repo here :(
+        return CsvData::first()->import_batch;
     }
 }

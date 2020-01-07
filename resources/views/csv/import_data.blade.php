@@ -23,12 +23,14 @@
                     </div>
 
                     @if (session('status'))
-                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                            {{ session('status') }}
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
+                        @if(!is_array(session('status')))
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                {{ session('status') }}
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        @endif
                     @endif
 
                         <form action="{{ route('csv.store') }}"
@@ -55,6 +57,38 @@
             </div>
         </div>
     </div>
+
+    <!--Notification about file exclusion-->
+    @if (session('status'))
+        @if(is_array(session('status')))
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="card bg-danger mt-4">
+                        <div class="card-header bg-dark text-danger">
+                            Import Notice
+                        </div>
+                        <div class="card-body bg-light" style="max-height: 400px;overflow-y: scroll">
+                            @foreach(session('status') as $k => $v)
+                                <div class="mb-2">
+                                    <div class="text-capitalize text-bold">{{ $k }}</div>
+
+                                    @if(is_array($v))
+                                        <ul>
+                                            @foreach($v as $f)
+                                                <li>{{ $f['file_name'] }}</li>
+                                            @endforeach
+                                        </ul>
+                                    @else
+                                        <div>{{ $v }}</div>
+                                    @endif
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endif
+    @endif
     
     <!--Existing data display-->
     <div class="row justify-content-center">

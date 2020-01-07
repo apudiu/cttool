@@ -15,7 +15,7 @@ class SettingTableSeeder extends Seeder
         Setting::create([
             'php_name' => 'php',
             'docudex_path' => '/var/www/html/php56/docudex',
-            'files_path' => '/var/www/html/php73/dev/cttool/public/uploads',
+            'files_path' => base_path() . '/public/uploads',
             'config_path' => '/var/www/html/php56/docudex/cbl_config.yml'
         ]);
     }

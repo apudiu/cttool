@@ -32,14 +32,19 @@ trait Report {
     }
 
     /**
-     * @throws FileNotFoundException
+     * @param int $importBatch
+     * @throws \Exception
      */
-    public function logReport() {
+    public function logReport(int $importBatch) {
         // preparing files list
-        $this->getResultFromFile();
+         $this->getResultFromFile();
 
         foreach ($this->resultData as $result) {
             // not using repository ..
+
+            // adding import batch to result
+            $result['import_batch'] = $importBatch;
+
             // saving log report based report to DB
             ReportModel::create($result);
         }
@@ -77,7 +82,8 @@ trait Report {
     }
 
     /**
-     * @throws FileNotFoundException
+     * Gets files result from result.txt (in files dir)
+     * @throws \Exception
      */
     private function getResultFromFile() {
 
@@ -127,6 +133,7 @@ trait Report {
         $fileStatus = substr($logString, $fileStatusPos, strlen($fileStatusSuccess));
 
         $data = [
+            'import_batch' => $this->importBatch,
             'time' => $fileTime,
             'name' => $fileName,
             'status' => $fileStatus,
@@ -153,9 +160,54 @@ trait Report {
     /**
      * Creates specified files
      * @param string $filePath
+     * @throws \Exception
      */
     private function createFile($filePath) {
+
+        $pathInfo = pathinfo($filePath);
+        $dir = $pathInfo['dirname'];
+        $file= $pathInfo['basename'];
+
+        if (!is_dir($dir)) {
+            throw new \Exception("Invalid result file ({$file}) directory: {$dir} ");
+        }
+
         $fileHandler = fopen($filePath, 'w');
         fclose($fileHandler);
+    }
+
+
+    /**
+     * Logs report of those files which was tried to upload again
+     * @param array $data
+     */
+    public function logReportExistingData(array $data) {
+
+        // preparing report data
+        $logEntries = $this->formatExistingDataForReport($data);
+
+        foreach ($logEntries as $entry) {
+
+            // saving log report to DB
+            ReportModel::create($entry);
+        }
+    }
+
+    /**
+     * Prepares / formats report data from excluded files list
+     * @param array $csvFiles
+     * @return array
+     */
+    private function formatExistingDataForReport(array $csvFiles) {
+
+        return array_map(function ($item) {
+            return [
+                'import_batch' => $item['import_batch'],
+                'time' => now()->toDateTime(),    // SQL datatime format
+                'name' => $item['file_name'],
+                'status' => 'FAILURE',
+                'reason' => 'File already uploaded',
+            ];
+        }, $csvFiles);
     }
 }

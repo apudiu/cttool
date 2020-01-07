@@ -58,7 +58,6 @@ class HomeController extends Controller
      * Bulk upload files with an option to dry run
      * @param Request $request
      * @return string
-     * @throws \App\Exceptions\FileNotFoundException
      */
     public function bulkUpload(Request $request) {
 
@@ -70,7 +69,7 @@ class HomeController extends Controller
 
         // logging report
         if (!$dryRun) {
-            $this->logReport();
+            $this->logReport($this->importBatch);
 
             // Send count of processed files for the user
             $log = $log . "<br />" . "Success: {$this->getResultCount('success')}, Failure: {$this->getResultCount('failure')}";

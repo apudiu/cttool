@@ -5,7 +5,7 @@
       <paths name="CTTOOL">
         <serverdata>
           <mappings>
-            <mapping deploy="/php73/dev/cttool" local="$PROJECT_DIR$" web="/" />
+            <mapping deploy="/nginx/dev/cttool" local="$PROJECT_DIR$" web="/" />
           </mappings>
           <excludedPaths>
             <excludedPath path="/php73/dev/cttool/.git" />

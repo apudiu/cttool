@@ -9,19 +9,30 @@
             <div class="card">
                 <div class="card-header">
                     <div class="row">
-                        <div class="col-8">
-                            <div class="d-inline ml-0 mr-auto">File Upload Report</div>
+                        <div class="col-6">
+                            <div class="d-inline ml-0 mr-auto">File Upload Report : {{ $report->count() }}</div>
                         </div>
-                        <div class="col-4">
+                        <div class="col-6">
                             <form action="{{ route('report.index') }}">
                                 <div class="input-group">
-                                    <input type="hidden" id="report-d-range" name="date-range">
+                                    <input type="hidden"
+                                           id="report-d-range"
+                                           name="date-range"
+                                           value="{{ $rawDateRange }}">
+
+                                    <input type="text"
+                                           class="form-control"
+                                           name="batch"
+                                           placeholder="Batch"
+                                           value="{{ $batch }}">
+
                                     <input type="text"
                                            id="report-date-range"
                                            class="form-control"
-                                           placeholder="{{ empty($rawDateRange) ? 'Date range' : $rawDateRange }}"
+                                           placeholder="Date range"
                                            autocomplete="off"
-                                           required>
+                                           value="{{ $dateRange }}">
+
                                     <div class="input-group-append">
                                         <button class="btn btn-primary" type="submit">Search</button>
                                         <a href="{{ route('report.index') }}" class="btn btn-secondary">Clear</a>
@@ -44,6 +55,7 @@
                             <thead>
                             <tr>
                                 <th>#</th>
+                                <th>Batch</th>
                                 <th>File</th>
                                 <th>Status</th>
                                 <th>Time</th>
@@ -54,6 +66,7 @@
                             @forelse($report as $file)
                                 <tr>
                                     <td>{{ $file->id }}</td>
+                                    <td>{{ $file->import_batch }}</td>
                                     <td>{{ $file->name }}</td>
                                     <td>
                                         @if($file->status == 'SUCCESS')
@@ -67,7 +80,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="5">No data!</td>
+                                    <td colspan="6">No data!</td>
                                 </tr>
                             @endforelse
                             </tbody>

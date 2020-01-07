@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class Report extends Model
 {
-    protected $fillable = ['name', 'status', 'reason', 'time'];
+    protected $fillable = ['import_batch', 'name', 'status', 'reason', 'time'];
 }

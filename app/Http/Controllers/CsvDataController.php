@@ -5,12 +5,16 @@ namespace App\Http\Controllers;
 use App\CsvData;
 use App\Exceptions\CSVException;
 use App\Http\Requests\CSVFileFormRequest;
+use App\Report;
+use App\Traits\Report as ReportTrait;
 use App\Repositories\CsvData\CsvDataInterface;
 use EasyCSV\Reader;
 use Illuminate\Http\Request;
 
 class CsvDataController extends Controller
 {
+    use ReportTrait;
+
     protected $csvData;
 
     public function __construct(CsvDataInterface $csv)
@@ -47,6 +51,12 @@ class CsvDataController extends Controller
      */
     public function store(CSVFileFormRequest $request)
     {
+        // prevent uploading csv if there's pending upload batch
+        if ($this->checkForPendingUploadBatch()) {
+            // redirecting back
+            return redirect()->back()->with('status', 'Upload pending batches to upload again.');
+        }
+
         // getting CSV file from request
         $csvFile = $request->file('csv_file');
 
@@ -60,10 +70,36 @@ class CsvDataController extends Controller
         }
 
         // inserting into DB
-        $this->csvData->createMany($rows);
+        // Filtering out previously uploaded files
+        $data = $this->checkForExisting($rows['data']);
 
-        // redirecting back
-        return redirect()->back()->with('status', 'All data has been imported.');
+        if ($data['itemsCount'] > 0) {
+
+            $this->csvData->createMany($data['items']);
+
+            // if items removed
+            if ($data['removedCount'] > 0) {
+
+                $status = [
+                    'batch' => $rows['batch'],
+                    'count' => "Excluded: {$data['removedCount']}/{$data['totalCount']} files because of duplication.",
+                    'files' => $data['itemsRemoved']
+                ];
+
+                // saving log report to reports
+                $this->logReportExistingData($data['itemsRemoved']);
+
+            } else {
+                $status = 'All data has been imported.';
+            }
+
+            // redirecting back
+            return redirect()->back()->with('status', $status);
+        } else {
+
+            // redirecting back
+            return redirect()->back()->with('status', 'Duplicate list ! No data imported for upload.');
+        }
     }
 
 
@@ -128,6 +164,56 @@ class CsvDataController extends Controller
             return $item;
         }, $data);
 
-        return $data;
+        return [
+            'batch' => $batch,
+            'data' => $data
+        ];
     }
+
+    /**
+     * Filters out previously uploaded files
+     * @param array $csvData
+     * @return array
+     */
+    public function checkForExisting(array $csvData) :array {
+
+        $removedItems = [];
+
+        $items = array_filter($csvData, function ($item) use (&$removedItems) {
+
+            $fileName = $item['file_name'];
+
+            // is the file found in report
+            $exists = (Report::where('name', $fileName)->count() < 1);
+
+            // keeping removed items
+            if (!$exists) {
+                array_push($removedItems, $item);
+            }
+
+            return $exists;
+        });
+
+        return [
+            // number of elements before processing
+            'totalCount' => count($csvData),
+            // number of elements which has been removed
+            'removedCount' => count($csvData) - count($items),
+            // number of elements remaining after removal
+            'itemsCount' => count($items),
+
+            // elements after removal
+            'items' => $items,
+            // removed elements
+            'itemsRemoved' => $removedItems
+        ];
+    }
+
+    /**
+     * Checks if there's pending batch for upload
+     * @return bool
+     */
+    public function checkForPendingUploadBatch() :bool {
+        return $this->csvData->model()->count() ? true : false;
+    } 
 }
