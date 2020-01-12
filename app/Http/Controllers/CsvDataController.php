@@ -93,6 +93,14 @@ class CsvDataController extends Controller
                 $status = 'All data has been imported.';
             }
 
+            // log audit log
+            setAuditLog([
+                'user' => $request->user()->name,
+                'ip' => $request->ip(),
+                'action' => config('app.audit.log-types.csv-upload'),
+                'details' => "CSV files data imported"
+            ]);
+
             // redirecting back
             return redirect()->back()->with('status', $status);
         } else {
@@ -111,6 +119,14 @@ class CsvDataController extends Controller
 
         // deleting all csv data (know that its not that efficient)
         getAuthUser()->csv_data()->delete();
+
+        // log audit log
+        setAuditLog([
+            'user' => getAuthUser()->name,
+            'ip' => request()->ip(),
+            'action' => config('app.audit.log-types.csv-clear'),
+            'details' => "CSV data cleared"
+        ]);
 
         // redirect
         return redirect()->back()->with('status', 'CSV Cleared.');
@@ -215,5 +231,5 @@ class CsvDataController extends Controller
      */
     public function checkForPendingUploadBatch() :bool {
         return $this->csvData->model()->count() ? true : false;
-    } 
+    }
 }

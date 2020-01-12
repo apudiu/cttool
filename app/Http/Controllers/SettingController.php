@@ -51,6 +51,14 @@ class SettingController extends Controller
         // update setting
         $setting->first()->update($request->all());
 
+        // log audit log
+        setAuditLog([
+            'user' => $request->user()->name,
+            'ip' => $request->ip(),
+            'action' => config('app.audit.log-types.setting-updated'),
+            'details' => "Application setting updated"
+        ]);
+
         // redirect
         return redirect()->route('setting.index')->with('status', 'Setting saved.');
     }

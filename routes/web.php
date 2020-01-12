@@ -41,3 +41,7 @@ Route::prefix('setting')->group(function() {
 Route::prefix('report')->group(function() {
     Route::get('/', 'ReportController@index')->name('report.index');
 });
+
+Route::prefix('audit')->group(function() {
+    Route::get('logs', 'AuditLogController@index')->name('audit.logs');
+});

@@ -49,7 +49,15 @@ class ReportController extends Controller
             $report = Report::orderByDesc('time')
                 ->paginate($perPageRecords);
         }
-        
+
+
+        // log audit log
+        setAuditLog([
+            'user' => request()->user()->name,
+            'ip' => request()->ip(),
+            'action' => config('app.audit.log-types.access-report'),
+            'details' => "Accessed file upload report"
+        ]);
 
         $data = [
             'batch' => $batch,

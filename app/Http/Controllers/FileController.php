@@ -99,6 +99,14 @@ class FileController extends Controller
             $file->move($this->imageUploadPath, $file->getClientOriginalName());
         }
 
+        // log audit log
+        setAuditLog([
+            'user' => $request->user()->name,
+            'ip' => $request->ip(),
+            'action' => config('app.audit.log-types.file-upload'),
+            'details' => "{$uploadedFiles->count()} image file uploaded"
+        ]);
+
         return $uploadedFiles->pluck('name');
     }
 

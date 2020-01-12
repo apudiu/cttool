@@ -41,11 +41,14 @@ trait Bash {
         $s = Setting::first();
 
         // command
+        $fileChunkSize = config('app.fileUpload.chunk-size');
+        $concurrentProcesses = config('app.fileUpload.concurrent-process');
         // dry run
         // php docudex/app/console docudex:bulk-import-documents --path='files_path' --config='config_path.yml' --dry-run=1
         $cmdDry = "{$s->php_name} {$s->docudex_path}/app/console docudex:bulk-import-documents --path='{$s->files_path}' --config='{$s->config_path}' --dry-run=1";
         // document upload (runner)
-        $cmd = "cd {$s->docudex_path};{$s->php_name} app/console docudex:bulk-import-runner --path='{$s->files_path}' --size=1000 --concurrent=2";
+//        $cmd = "cd {$s->docudex_path}; {$s->php_name} app/console docudex:bulk-import-runner --path='{$s->files_path}' --size={$fileChunkSize} --concurrent={$concurrentProcesses}";
+        $cmd = "{$s->php_name} {$s->docudex_path}/app/console docudex:bulk-import-runner --path='{$s->files_path}' --size={$fileChunkSize} --concurrent={$concurrentProcesses}";
 
         // execute
         // storing last import batch

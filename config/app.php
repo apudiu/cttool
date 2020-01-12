@@ -237,7 +237,10 @@ return [
     'fileUpload' => [
         'limit' => env('FILE_UPLOAD_LIMIT', 10000),
         'extensions' => explode(',', env('FILE_ALLOWED_EXTENSONS', 'jpg,jpeg,tiff,pdf')),
-        'path' => env('FILE_UPLOAD_DIR', 'uploads')
+        'path' => env('FILE_UPLOAD_DIR', 'uploads'),
+
+        'chunk-size' => 1000,       // divides files before upload
+        'concurrent-process' => 2   // run concurrent upload processes
     ],
 
     'report' => [
@@ -245,4 +248,24 @@ return [
         'per-page' => 20
     ],
 
+    'audit' => [
+        'per-page' => 20,
+        'log-types' => [
+            'login' => 'User Login',
+            'logout' => 'User Logout',
+
+            'access-report' => 'Report Access',
+            'access-audit' => 'Audit Log Access',
+
+            'setting-updated' => 'Setting Updated',
+
+            'csv-upload' => 'CSV Upload',
+            'csv-clear' => 'CSV Data Cleared',
+
+            'file-upload' => 'Image Upload',
+
+            'document-upload-dry' => 'Document Upload dry-run',
+            'document-upload' => 'Document Upload'
+        ]
+    ],
 ];

@@ -621,4 +621,13 @@ function getSetting($settingName) {
     return \App\Setting::first()->$settingName;
 }
 
+/**
+ * Persists audit log data
+ * @param array $data
+ * @return mixed
+ */
+function setAuditLog(array $data) {
+    return \App\Audit_log::create($data);
+}
+
 

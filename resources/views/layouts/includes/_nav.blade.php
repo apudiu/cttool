@@ -44,7 +44,7 @@
                             File
                         </a>
                     </li>
-                    <li class="nav-item dropdown {{ ifRoute(['setting.index','report.index'], 'active') }}">
+                    <li class="nav-item dropdown {{ ifRoute(['setting.index','report.index', 'audit.logs'], 'active') }}">
                         <a id="navbarDropdown"
                            class="nav-link dropdown-toggle"
                            href="#"
@@ -59,6 +59,7 @@
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" href="{{ route('report.index') }}">Report</a>
                             <a class="dropdown-item" href="{{ route('setting.index') }}">Setting</a>
+                            <a class="dropdown-item" href="{{ route('audit.logs') }}">Audit Log</a>
 
                             <div class="dropdown-divider"></div>
 

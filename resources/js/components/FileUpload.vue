@@ -100,7 +100,7 @@
                 files: [],      // selected files
                 fileExtensions: '',     // allowed file extensions
 
-                chunkSize: 3,   // files to send at once (files will be sent by chinking them)
+                chunkSize: 20,   // files to send at once (files will be sent by chinking them)
                 uploadPercentage: 0 // successful upload percentage
             }
         },

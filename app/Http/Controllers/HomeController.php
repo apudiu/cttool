@@ -73,7 +73,22 @@ class HomeController extends Controller
 
             // Send count of processed files for the user
             $log = $log . "<br />" . "Success: {$this->getResultCount('success')}, Failure: {$this->getResultCount('failure')}";
+
+            // log audit log
+            setAuditLog([
+                'user' => $request->user()->name,
+                'ip' => $request->ip(),
+                'action' => config('app.audit.log-types.document-upload'),
+                'details' => "Bulk document upload"
+            ]);
         }
+
+        setAuditLog([
+            'user' => $request->user()->name,
+            'ip' => $request->ip(),
+            'action' => config('app.audit.log-types.document-upload-dry'),
+            'details' => "Document upload dry run"
+        ]);
 
         return $log ?? 'No log available!';
     }
