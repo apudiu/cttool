@@ -2,10 +2,8 @@
 <project version="4">
   <component name="WebServers">
     <option name="servers">
-      <webServer id="a6aff6a6-276a-46f8-a91d-4ed1281109b1" name="CTTOOL" url="http://s3.cttool.devl">
-        <fileTransfer host="192.168.0.211" port="22" accessType="SFTP">
-          <option name="port" value="22" />
-        </fileTransfer>
+      <webServer id="0eb85822-9153-4019-890e-10eb59fd70b7" name="CTTOOL" url="http://s3.cttool.devl">
+        <fileTransfer accessType="SFTP" host="192.168.0.211" port="22" sshConfigId="549bfb9d-2896-46b0-af47-7272fbc23dd1" sshConfig="CTTOOL" />
       </webServer>
     </option>
   </component>
